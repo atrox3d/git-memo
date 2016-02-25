@@ -1,30 +1,41 @@
 # git-memo
 a handy list of git commands
 
-# memo git
+## Creating branch
+```
+#creates local branch
+git branch -b [branch-name]
+# update remote on github and updates tracking
+git push origin [branch name]
+```
 
-**atom** : `ctrl+shift+h / checkout new branch / {{nome branch}}`
+## Moving to a branch
+`git checkout [branch-name]`
 
-**CLI** : `git branch -r`
+## Updating list of available branches
+`git remote update origin --prune`
 
-**CLI** : `git branch`
 
-**CLI** : `git checkout {{nome branch}}`
+## Merging and deleting a branch
+```
+#change to master branch
+git checkout master
+#merge from branch to master
+git merge [branch-name]
+#update master
+git push
+#delete local branch
+git branch -d [branch-name]
+#delete remote branch
+git push origin :[branch-name]
+# OR
+# git push origin --delete {{nome branch}}
+```
 
-**CLI** : `git merge master`
+## Removes local orphan branches
+`git fetch --all --prune`
 
-**CLI** : `git remote update origin --prune`
-	aggiorna la lista dei branch disponibili
+## Reset single file to the last commit
+`git checkout HEAD -- my-file.txt`
 
-**CLI** : `git push -u origin {{nome branch}}`
-	aggiunge il branch locale in remoto e aggiorna il tracking
-
-**CLI** : `git push origin --delete {{nome branch}}`
-	elimina il branch remoto
-
-**CLI** : `git fetch --all --prune`
-	elimina i branch orfani locali
-
-**CLI** : `git checkout HEAD -- my-file.txt`
-	resetta un singolo file locale (working copy)
 
