@@ -4,7 +4,7 @@ a handy list of git commands
 ## Creating branch
 ```
 #creates local branch
-git branch -b [branch-name]
+git checkout -b [branch-name]
 # update remote on github and updates tracking
 git push origin [branch name]
 ```
