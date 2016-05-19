@@ -1,6 +1,9 @@
 # git-memo
 a handy list of git commands
 
+## Adding a local project on remote
+https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/
+
 ## Creating branch
 ```
 #creates local branch
