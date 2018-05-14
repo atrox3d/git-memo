@@ -41,4 +41,20 @@ git push origin :[branch-name]
 ## Reset single file to the last commit
 `git checkout HEAD -- my-file.txt`
 
+---
+## Git local repository on filesystem
+---
+```
+# cd ~/code/project
+cd ${path/to/my/project}
+git init
+# git init --bare ~/git/repos/project.git
+git init --bare ${path/to/git/repo}
+# git remote add origin  ~/git/repos/project.git
+git remote add origin ${path/to/my/project}
+git add .
+git commit -m "comment"
+git push origin master
+```
+
 
