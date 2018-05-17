@@ -44,6 +44,7 @@ git push origin :[branch-name]
 ---
 ## Git local repository on filesystem
 ---
+
 ```
 #cd ${path/to/my/project}
 cd ~/code/project
@@ -60,6 +61,29 @@ git remote add origin  ~/git/repos/project.git
 git add .
 git commit -m "comment"
 git push origin master
+```
+
+---
+## converto github repo to Git local repository on filesystem
+---
+
+```
+cd /parent/path/of/project
+
+git clone https://github.com/user/repo
+
+git remote -v
+
+#cd ${path/to/my/project}
+cd repo
+
+#git init --bare ${path/to/git/repo}
+git init --bare ~/git/repos/nameofproject-or-repo.git
+
+git remote set-url origin  ~/git/repos/nameofproject-or-repo.git
+git push
+git remote -v
+
 ```
 
 
