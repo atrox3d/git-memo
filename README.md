@@ -8,8 +8,10 @@ https://help.github.com/articles/adding-an-existing-project-to-github-using-the-
 ```
 #creates local branch
 git checkout -b [branch-name]
-# update remote on github and updates tracking
+# update remote on github
 git push origin [branch name]
+# update tracking
+git branch --set-upstream-to=origin/[branch-name]
 ```
 
 ## Moving to a branch
