@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
-
+###############################################################################
+#
+#	gitupdate.sh
+#
+#	- 	iterates over each subdirectory of current path
+#		if it contains a .git subfolder then performs:
+#			- git fetch
+#			- git status
+#		based on git status result displays colored status line
+#		if the repo needs pull/add/commit/... it displays git output
+#
+###############################################################################
+#
+#	colorful colors, yay...
+#
 readonly COLOR_OFF='\033[0m'
 readonly COLOR_LIGHT_RED='\033[1;31m'
 readonly COLOR_LIGHT_GREEN='\033[1;32m'
@@ -10,51 +24,58 @@ readonly COLOR_DARK_YELLOW='\033[0;33m'
 readonly COLOR_REV_RED='\033[7;31m'
 readonly COLOR_REV_GREEN='\033[7;32m'
 readonly COLOR_REV_YELLOW='\033[7;33m'
-
-#echo -e "${LIGHT_GREEN}light green"
-#echo -e "${DARK_GREEN}dark green"
-#echo -e "${COLOR_OFF}"
-
+#
+#	main loop
+#
 for DIR in */.git
 do
+	# just the dir name
 	DIR="${DIR%%/*}"
+	# formatted [dir name]
 	printf -v TAG "[%-30.30s]" "$DIR"
-	#echo "##################################################"
-	#echo "$TAG"
-	#echo "##################################################"
+	# subshell
 	(
+		# let's move into
 		cd "$DIR"
+		# do we have remotes?
 		[ "$(git remote -v)" != "" ] && {
-			#echo "$TAG	fetching..."
+			# yes, then we fetch
 			git fetch
 		} || {
+			# no, we dont
 			echo -e "$TAG	${COLOR_REV_RED}*** no remotes available ***${COLOR_OFF}"
 		}
-		#echo "--------------------------------------------------"
-		#echo "$TAG	[STATUS]"
-		#echo "--------------------------------------------------"
-		STATUS="$(git status)"
+		# git output
+		STATUS="$(git status 2>&1 )"
+		# git exit code
 		GITEXIT=$?
-		#git status
-		#echo
+		#
+		#	everyithing ok
+		#
 		[ $GITEXIT -eq 0 ] && {
+			#
+			#	ok, nothing to do
+			#
 			egrep -qiz '(On branch.*)(Your branch is up-to-date with.*)*nothing to commit, working tree clean' <<< "$STATUS" && {
-				#echo -e "$TAG	${COLOR_REV_GREEN}ok${COLOR_OFF}"
 				printf "$TAG	${COLOR_REV_GREEN}%-20.20s${COLOR_OFF}\n" "ok"
-				#git status
-				#echo
 			} || {
-				#echo -e "$TAG	${COLOR_REV_YELLOW}check message${COLOR_OFF}"
+				#
+				#	something to do
+				#
 				printf "$TAG	${COLOR_REV_YELLOW}%-20.20s${COLOR_OFF}\n" "check messages"
 				git status
 				echo
 			}
 		} || {
-			#echo -e "$TAG	${COLOR_REV_RED}something's wrong${COLOR_OFF}"
+			#
+			#	ERROR!!!!
+			#
 			printf "$TAG	${COLOR_REV_RED}%-20.20s${COLOR_OFF}\n" "something's wrong"
 			git status
 			echo
 		}
-		#echo
 	)
+	#
+	#	end subshell, nothing happened
+	#
 done
