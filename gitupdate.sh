@@ -60,7 +60,7 @@ do
 			#
 			#egrep -qiz '(On branch.*)(Your branch is up-to-date with.*)*nothing to commit, working tree clean' <<< "$STATUS" && {
 			#git status |  tr $'\n' ' ' | egrep -i "(On branch [^[:space:]]+)[[:space:]]+(your branch is up to date with '[^']+'\.)[[:space:]]+(nothing to commit, working tree clean)"
-			regex="(On branch [^[:space:]]+)[[:space:]]+(your branch is up-to-date with '[^']+'\.[[:space:]]+)*(nothing to commit, working tree clean)"
+			regex="(On branch [^[:space:]]+)[[:space:]]+(your branch is up[ -]to[ -]date with '[^']+'\.[[:space:]]+)*(nothing to commit, working tree clean)"
 			git status | tr $'\n' ' ' | egrep -qi "$regex" && {
 				printf "$TAG	${NOREMOTES}${COLOR_REV_GREEN}%-25.25s${COLOR_OFF}\n" "ok"
 				#echo "$STATUS"
