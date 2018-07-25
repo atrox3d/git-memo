@@ -44,7 +44,7 @@ do
 			NOREMOTES=
 		} || {
 			# no, we dont
-			NOREMOTES="${COLOR_REV_RED}*** no remotes available ***${COLOR_OFF}"
+			NOREMOTES="${COLOR_REV_RED}* no remotes available * ${COLOR_OFF}"
 			#echo -en "$TAG	${COLOR_REV_RED}*** no remotes available ***${COLOR_OFF}"
 		}
 		# git output
@@ -62,14 +62,14 @@ do
 			#git status |  tr $'\n' ' ' | egrep -i "(On branch [^[:space:]]+)[[:space:]]+(your branch is up to date with '[^']+'\.)[[:space:]]+(nothing to commit, working tree clean)"
 			regex="(On branch [^[:space:]]+)[[:space:]]+(your branch is up-to-date with '[^']+'\.[[:space:]]+)*(nothing to commit, working tree clean)"
 			git status | tr $'\n' ' ' | egrep -qi "$regex" && {
-				printf "$TAG	${NOREMOTES}${COLOR_REV_GREEN}%-20.20s${COLOR_OFF}\n" "ok"
+				printf "$TAG	${NOREMOTES}${COLOR_REV_GREEN}%-25.25s${COLOR_OFF}\n" "ok"
 				#echo "$STATUS"
 				#git status
 			} || {
 				#
 				#	something to do
 				#
-				printf "$TAG	${NOREMOTES}${COLOR_REV_YELLOW}%-20.20s${COLOR_OFF}\n" "check messages"
+				printf "$TAG	${NOREMOTES}${COLOR_REV_YELLOW}%-25.25s${COLOR_OFF}\n" "check messages"
 				git status
 				echo
 			}
@@ -77,7 +77,7 @@ do
 			#
 			#	ERROR!!!!
 			#
-			printf "$TAG	${NOREMOTES}${COLOR_REV_RED}%-20.20s${COLOR_OFF}\n" "something's wrong"
+			printf "$TAG	${NOREMOTES}${COLOR_REV_RED}%-25.25s${COLOR_OFF}\n" "something's wrong"
 			git status
 			echo
 		}
