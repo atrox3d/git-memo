@@ -56,8 +56,11 @@ do
 			#
 			#	ok, nothing to do
 			#
+			#git status |  tr $'\n' ' ' | egrep -i "(On branch [^[:space:]]+)[[:space:]]+(your branch is up to date with '[^']+'\.)[[:space:]]+(nothing to commit, working tree clean)"
 			egrep -qiz '(On branch.*)(Your branch is up-to-date with.*)*nothing to commit, working tree clean' <<< "$STATUS" && {
 				printf "$TAG	${COLOR_REV_GREEN}%-20.20s${COLOR_OFF}\n" "ok"
+				#echo "$STATUS"
+				git status
 			} || {
 				#
 				#	something to do
