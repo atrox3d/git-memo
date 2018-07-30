@@ -24,6 +24,16 @@ readonly COLOR_DARK_YELLOW='\033[0;33m'
 readonly COLOR_REV_RED='\033[7;31m'
 readonly COLOR_REV_GREEN='\033[7;32m'
 readonly COLOR_REV_YELLOW='\033[7;33m'
+
+PULLENABLED="false"
+for arg
+do
+	if [ "${arg,,}" = "--pull" ]
+	then
+		PULLENABLED="true"
+		echo "PULL ENABLED"
+	fi
+done
 #
 #	main loop
 #
@@ -54,30 +64,60 @@ do
 		#
 		#	everyithing ok
 		#
-		[ $GITEXIT -eq 0 ] && {
+		if [ $GITEXIT -eq 0 ]
+		then
 			#
-			#	ok, nothing to do
+			#	ok, no errors. let's check if there's something to do
 			#
-			#egrep -qiz '(On branch.*)(Your branch is up-to-date with.*)*nothing to commit, working tree clean' <<< "$STATUS" && {
-			#git status |  tr $'\n' ' ' | egrep -i "(On branch [^[:space:]]+)[[:space:]]+(your branch is up to date with '[^']+'\.)[[:space:]]+(nothing to commit, working tree clean)"
 			regex="(On branch [^[:space:]]+)[[:space:]]+"
 			regex="${regex}(your branch is up[ -]to[ -]date with '[^']+'\.[[:space:]]+)*"
 			regex="${regex}(nothing to commit, working tree clean)"
-			
-			git status | tr $'\n' ' ' | egrep -qi "$regex" && {
+			#
+			if git status | tr $'\n' ' ' | egrep -qi "$regex"
+			then
+				#
+				#	nothing to do, repo up-to-date
+				#
 				printf "$TAG	${COLOR_REV_GREEN}%-25.25s${COLOR_OFF}${EXTRA}\n" "ok"
-				#echo "$STATUS"
-				#git status
-			} || {
+			else
 				#
-				#	something to do
+				#	ok, no errors. let's check if there's something to do
 				#
-				printf "$TAG	${COLOR_REV_YELLOW}%-25.25s${COLOR_OFF}${EXTRA}\n" "check messages"
-				echo "----------------------------------------------------------------------------"
-				git status
-				echo "----------------------------------------------------------------------------"
-			}
-		} || {
+				regex="(On branch [^[:space:]]+)[[:space:]]+"
+				regex="${regex}(your branch is behind '[^']+' by [0-9]+ commits,.*?fast-forwarded\.)[[:space:]]+"
+				regex="${regex}(\(use \"git pull\" to update your local branch\))[[:space:]]+"
+				regex="${regex}(nothing to commit, working tree clean)"
+				#
+				if git status | tr $'\n' ' ' | egrep -qi "$regex"
+				then
+					#
+					#	something to do
+					#
+					if [ "$PULLENABLED" = "true" ]
+					then
+						printf "$TAG	${COLOR_REV_YELLOW}%-25.25s${COLOR_OFF}${EXTRA}\n" "PULL needed"
+						git pull && {
+							printf "$TAG	${COLOR_REV_GREEN}%-25.25s${COLOR_OFF}${EXTRA}\n" "PULL OK"
+						} || {
+							printf "$TAG	${COLOR_REV_RED}%-25.25s${COLOR_OFF}${EXTRA}\n" "PULL ERROR"
+						}
+					else
+						printf "$TAG	${COLOR_REV_YELLOW}%-25.25s${COLOR_OFF}${EXTRA}\n" "PULL needed"
+						echo "----------------------------------------------------------------------------"
+						git status
+						echo "----------------------------------------------------------------------------"
+					fi
+				else
+					#
+					#	something to do
+					#
+					printf "$TAG	${COLOR_REV_YELLOW}%-25.25s${COLOR_OFF}${EXTRA}\n" "check messages"
+					echo "----------------------------------------------------------------------------"
+					git status
+					echo "----------------------------------------------------------------------------"
+				fi
+			fi
+		else
 			#
 			#	ERROR!!!!
 			#
@@ -85,7 +125,7 @@ do
 			echo "----------------------------------------------------------------------------"
 			git status
 			echo "----------------------------------------------------------------------------"
-		}
+		fi
 	)
 	#
 	#	end subshell, nothing happened
