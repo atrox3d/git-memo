@@ -84,7 +84,7 @@ do
 				#	ok, no errors. let's check if there's something to do
 				#
 				regex="(On branch [^[:space:]]+)[[:space:]]+"
-				regex="${regex}(your branch is behind '[^']+' by [0-9]+ commits,.*?fast-forwarded\.)[[:space:]]+"
+				regex="${regex}(your branch is behind '[^']+' by [0-9]+ commit[s]*,.*?fast-forwarded\.)[[:space:]]+"
 				regex="${regex}(\(use \"git pull\" to update your local branch\))[[:space:]]+"
 				regex="${regex}(nothing to commit, working tree clean)"
 				#
