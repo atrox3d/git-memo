@@ -71,7 +71,7 @@ do
 			#
 			regex="(On branch [^[:space:]]+)[[:space:]]+"
 			regex="${regex}(your branch is up[ -]to[ -]date with '[^']+'\.[[:space:]]+)*"
-			regex="${regex}(nothing to commit, working tree clean)"
+			regex="${regex}(nothing to commit, working (directory|tree) clean)"
 			#
 			if git status | tr $'\n' ' ' | egrep -qi "$regex"
 			then
@@ -86,7 +86,7 @@ do
 				regex="(On branch [^[:space:]]+)[[:space:]]+"
 				regex="${regex}(your branch is behind '[^']+' by [0-9]+ commit[s]*,.*?fast-forwarded\.)[[:space:]]+"
 				regex="${regex}(\(use \"git pull\" to update your local branch\))[[:space:]]+"
-				regex="${regex}(nothing to commit, working tree clean)"
+				regex="${regex}(nothing to commit, working (directory|tree) clean)"
 				#
 				if git status | tr $'\n' ' ' | egrep -qi "$regex"
 				then
