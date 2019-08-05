@@ -67,7 +67,6 @@ do
 		STATUS="$(git status 2>&1 )"
 		# git exit code
 		GITEXIT=$?
-		echo "GITEXIT=$GITEXIT"
 		#
 		#	everyithing ok
 		#
@@ -126,7 +125,7 @@ do
 
 				if [ "$STOPATFIRST" = "true" ]
 				then
-					echo "STOPATFIRST ENABLED"
+					echo "STOPATFIRST ENABLED (GITEXIT=$GITEXIT)"
 					echo "exiting"
 					exit 1
 				fi
@@ -142,7 +141,7 @@ do
 			
 			if [ "$STOPATFIRST" = "true" ]
 			then
-				echo "STOPATFIRST ENABLED"
+				echo "STOPATFIRST ENABLED (GITEXIT=$GITEXIT)"
 				echo "exiting"
 				exit 1
 			fi
