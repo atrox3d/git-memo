@@ -26,12 +26,18 @@ readonly COLOR_REV_GREEN='\033[7;32m'
 readonly COLOR_REV_YELLOW='\033[7;33m'
 
 PULLENABLED="false"
+STOPATFIRST="false"
 for arg
 do
 	if [ "${arg,,}" = "--pull" ]
 	then
 		PULLENABLED="true"
 		echo "PULL ENABLED"
+	fi
+	if [ "${arg,,}" = "--first" ]
+	then
+		STOPATFIRST="true"
+		echo "STOPATFIRST ENABLED"
 	fi
 done
 #
@@ -61,6 +67,7 @@ do
 		STATUS="$(git status 2>&1 )"
 		# git exit code
 		GITEXIT=$?
+		echo "GITEXIT=$GITEXIT"
 		#
 		#	everyithing ok
 		#
@@ -116,6 +123,13 @@ do
 					git status
 					echo "----------------------------------------------------------------------------"
 				fi
+
+				if [ "$STOPATFIRST" = "true" ]
+				then
+					echo "STOPATFIRST ENABLED"
+					echo "exiting"
+					exit 1
+				fi
 			fi
 		else
 			#
@@ -125,8 +139,15 @@ do
 			echo "----------------------------------------------------------------------------"
 			git status
 			echo "----------------------------------------------------------------------------"
+			
+			if [ "$STOPATFIRST" = "true" ]
+			then
+				echo "STOPATFIRST ENABLED"
+				echo "exiting"
+				exit 1
+			fi
 		fi
-	)
+	) || exit 1
 	#
 	#	end subshell, nothing happened
 	#
